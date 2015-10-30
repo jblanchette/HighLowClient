@@ -1,0 +1,17 @@
+#outer-wrapper {
+	padding: 2rem;
+}
+
+#game-list-wrapper {
+	display: inline-block;
+	border: 1px solid #333;
+	height: 10rem;
+	width: 6rem;
+}
+
+#game-window-wrapper {
+	display: inline-block;
+	border: 1px solid #0000FF;
+	height: 15rem;
+	width: 25rem;
+}
