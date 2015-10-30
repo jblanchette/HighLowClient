@@ -1,3 +1,8 @@
+<header><h3>Game List</h3></header>
 <ul>
-	<li>I am a game list</li>
+	<li ng-repeat="game in games" ng-click="joinGame(game.id)">
+		<div class="game-info">
+			{{ game.gameName }} - {{ game.members.length }} / {{ game.maxPlayerCount }}
+		</div>
+	</li>
 </ul>

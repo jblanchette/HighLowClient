@@ -1,11 +1,12 @@
 angular.module("app", [
 	"ui.router",
 	"app.Home",
-	"app.gameList"
+	"app.gameList",
+	"app.SocketManager"
 ])
 
-.run(function () {
-	console.log("I ran?");
+.run(function (SocketManager) {
+	SocketManager.initalize(socketIoInstance);
 })
 
 .config(
@@ -15,7 +16,7 @@ angular.module("app", [
 
     	$stateProvider.state("home", {
     		url: "/",
-    		template: "I worked! <b>woo hoo</b>",
+    		templateUrl: "app/home/home.tpl.html",
     		controller: "HomeCtrl"
     	});
     }

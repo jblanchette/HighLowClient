@@ -1,4 +1,4 @@
 angular.module("app.Home", [])
-.controller("HomeCtrl", function () { 
-	console.log("Home ran?");
+.controller("HomeCtrl", function ($state) { 
+	console.log("Home ran?", $state.current);
 });

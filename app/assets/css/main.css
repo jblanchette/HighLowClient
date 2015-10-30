@@ -1,17 +1,37 @@
-#outer-wrapper {
+.outer-wrapper {
 	padding: 2rem;
 }
 
-#game-list-wrapper {
+.game-list-wrapper {
 	display: inline-block;
 	border: 1px solid #333;
-	height: 10rem;
-	width: 6rem;
+	border-radius: 1rem 1rem 0 0;
+	width: 20rem;
 }
 
-#game-window-wrapper {
-	display: inline-block;
-	border: 1px solid #0000FF;
-	height: 15rem;
-	width: 25rem;
+game-list header {
+	padding: 1rem;
+	text-align: center;
+	border-bottom: 1px solid #333;
+}
+
+game-list header h3 {
+	padding: 0;
+	margin: 0;	
+}
+
+game-list ul,
+game-list li {
+	margin: 0;
+	padding: 0;
+}
+
+game-list li {
+	display: block;
+	padding: 1rem;
+	cursor: pointer;
+}
+
+game-list li:hover {
+	background-color: #CCC;
 }
