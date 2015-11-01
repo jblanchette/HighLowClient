@@ -34,12 +34,16 @@ angular.module("app.gameList", ["app.SocketManager"])
 		SocketManager.sendTo("gameList", "JOIN_GAME", gameInfo);
 	};
 
-	$scope.$on("socket:gameList:message", function (e, data) {
+	var listener = $scope.$on("socket:gameList:message", function (e, data) {
 		console.log("Recieved a message: ", e, data);
-		
+
 		$timeout(function () {
 			$scope.handleSocketMessage(e, data);
 		});
+	});
+
+	$scope.$on("$destroy", function () {
+		listener();
 	});
 
 	var updateList = function () {
@@ -57,9 +61,6 @@ angular.module("app.gameList", ["app.SocketManager"])
     scope: true,
     controller: "gameListCtrl",
     // two bars in each graph
-    templateUrl: "app/directives/gameList/gameList.tpl.html",
-    link: function (scope, element, attrs) {
-    	console.log("I linked!?");
-    }
+    templateUrl: "app/directives/gameList/gameList.tpl.html"
    };
 })
