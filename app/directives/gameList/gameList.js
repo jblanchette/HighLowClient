@@ -1,9 +1,9 @@
 angular.module("app.gameList", ["app.SocketManager"])
 .controller("gameListCtrl", function ($timeout, $scope, SocketManager) {
-	console.log("Game list ctrl ran...");
-	$scope.games = [];
+	$scope.games = [];	
 
-	$scope.handleSocketMessage = function (message) {
+	$scope.handleSocketMessage = function (e, message) {
+		console.log("Handling socket msg: ", e, message);
 		switch(message.key) {
 			case "GAME_LIST":
 				$scope.games = message.data;
@@ -31,21 +31,23 @@ angular.module("app.gameList", ["app.SocketManager"])
 
 		console.log("Joining game...", gameInfo);
 
-		SocketManager.sendTo("JOIN_GAME", gameInfo);
+		SocketManager.sendTo("gameList", "JOIN_GAME", gameInfo);
 	};
 
+	$scope.$on("socket:gameList:message", function (e, data) {
+		console.log("Recieved a message: ", e, data);
+		
+		$timeout(function () {
+			$scope.handleSocketMessage(e, data);
+		});
+	});
+
 	var updateList = function () {
-		console.log("Asking for game list...");
-		SocketManager.sendTo("GAME_LIST");
+		console.log("Asking for game list...asdf");
+		SocketManager.sendTo("gameList", "GAME_LIST");
 	};
 
 	updateList();
-
-	$scope.$on("socket:message", function (event, data) {
-		$timeout(function () {
-			$scope.handleSocketMessage(data);
-		});
-	});
 
 })
 

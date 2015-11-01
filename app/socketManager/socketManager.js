@@ -1,47 +1,86 @@
 angular.module("app.SocketManager", [])
 
 .factory("SocketManager", function ($rootScope) {
-	var _io;
+	var sockets = {};
 
-	var sendTo = function (key, data) {
-		// todo: send things to rooms not just the server
-		_io.emit(key, data);
+	function WSocket (options) {
+		if (!_.has(options, "url") || !_.has(options, "id")) {
+			throw new Error("WSocket missing url or id: " + options);
+		}
+
+		this.id = options.id;
+		this.url = options.url;
+		this.handlers = options.handlers;
+		this.instance = null;
+	}
+
+	WSocket.prototype.connect = function () {
+		console.log("Connecting: ", this);
+		if (!this.instance || this.instance && !this.instance.connected) {
+			this.instance = io(this.url);	
+			this.setupHandlers();
+		}
 	};
 
-	var emitMessage = function (key, data) {
+	WSocket.prototype.setupHandlers = function () {
+		var self = this;
+
+		self.instance.on("connection", function (socket) {
+			console.log("I connected: ", socket);
+		})
+
+		_.each(this.handlers, function (handlerKey) {
+			self.instance.on(handlerKey, function (data) { 
+				emitMessage(self.id, handlerKey, data); 
+			});
+		});
+	};
+
+	WSocket.prototype.sendTo = function (key, data) {
+		this.instance.emit(key, data);
+	};
+
+	var emitMessage = function (id, key, data) {
 		var message = {
 			key: key,
 			data: data
 		};
 
-		$rootScope.$broadcast("socket:message", message);
-		console.log("Broadcasted: ", message);
-	};
-
-	var init = function () {
-		if (!_io) {
-			throw new Error("No Socket.IO instance found");
+		if (!id || !_.has(sockets, id)) {
+			return;
 		}
 
-		// todo: change this to be the generic message handler and broadcast the msg key with $broadcast
-
-		_io.on("GAME_LIST", function (data) {
-			emitMessage("GAME_LIST", data);
-		});
-
-		_io.on("JOIN_GAME", function (data) {
-			emitMessage("JOIN_GAME", data);
-		})
-
+		$rootScope.$broadcast("socket:" + id + ":message", message);
+		console.log("Broadcasted: ", id, message);
 	};
+
+	var get = function (id) {
+		return _.find(sockets, { id: id });
+	};
+
+	var create = function (o) {
+		if (!o.id || _.has(sockets, o.id)) {
+			throw new Error("Tried to create a socket twice: " + o);
+		}
+
+		var wSocket = new WSocket(o);
+		sockets[wSocket.id] = wSocket;
+
+		return wSocket;
+	};
+
+	var sendTo = function (id, key, data) {
+		var wSocket = get(id);
+
+		console.log("sending: ", id, key, data);
+		if (wSocket) {
+			wSocket.sendTo(key, data);
+		}
+	}
 
 	return {
-		initalize: function (ioInstance) {
-			_io = ioInstance;
-			init();
-		},
-		sendTo: function (key, data) {
-			sendTo(key, data);
-		}
+		create: create,
+		get: get,
+		sendTo: sendTo
 	};
 });

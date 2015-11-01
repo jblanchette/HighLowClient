@@ -6,7 +6,13 @@ angular.module("app", [
 ])
 
 .run(function (SocketManager) {
-	SocketManager.initalize(socketIoInstance);
+	var gameList = SocketManager.create({
+        id: "gameList",
+        url: "http://localhost:8080/gameList",
+        handlers: ["GAME_LIST", "JOIN_GAME"]
+    });
+
+    gameList.connect();
 })
 
 .config(
