@@ -27,7 +27,7 @@ angular.module("app.SocketManager", [])
 
 		self.instance.on("connection", function (socket) {
 			console.log("I connected: ", socket);
-		})
+		});
 
 		_.each(this.handlers, function (handlerKey) {
 			self.instance.on(handlerKey, function (data) { 
@@ -51,7 +51,6 @@ angular.module("app.SocketManager", [])
 		}
 
 		$rootScope.$broadcast("socket:" + id + ":message", message);
-		console.log("Broadcasted: ", id, message);
 	};
 
 	var get = function (id) {

@@ -1,7 +1,11 @@
 angular.module("app", [
 	"ui.router",
+    // modules
 	"app.Home",
+    // directives
+    "app.chatWindow",
 	"app.gameList",
+    // factories
 	"app.SocketManager"
 ])
 

@@ -2,12 +2,20 @@ angular.module("app.chatWindow", ["app.SocketManager"])
 
 .controller("chatWindowCtrl", function ($scope, SocketManager) {
   var members = {};
+  $scope.chatForm = {
+    input: ""
+  };
 
   var listener = $scope.$on("socket:" + $scope.nsp + ":message", function (e, data) {
     $scope.handleSocketMessage(e, data);
   });
 
+  $scope.sendMessage = function () {
+    console.log("Sending message: ", $scope.chatForm.input);
+  };
+
   $scope.newMessage = function (message) {
+    console.log("Called new message?");
     $scope.addMessage(message.author + ": " + message.text);
   };
 
@@ -27,7 +35,7 @@ angular.module("app.chatWindow", ["app.SocketManager"])
     }
   };
 
-  $scope.newMessage({ author: "Jeef", text: "Testing! Hello World! <b>woo</b>" });
+  //$scope.newMessage({ author: "Jeef", text: "Testing! Hello World! <b>woo</b>" });
 
   $scope.$on("$destroy", function () {
     listener();
@@ -44,7 +52,7 @@ angular.module("app.chatWindow", ["app.SocketManager"])
     // two bars in each graph
     templateUrl: "app/directives/chatWindow/chatWindow.tpl.html",
     link: function (scope, element, attrs) {
-      var el = $(element);
+      var el = angular.element(element);
 
       scope.addMessage = function (message) {
         var msgEl = angular.element("<div class='chat-message'>" + message + "</div>");
@@ -53,4 +61,4 @@ angular.module("app.chatWindow", ["app.SocketManager"])
       };
     }
   };
-)
+});

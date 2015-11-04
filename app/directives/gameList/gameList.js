@@ -12,8 +12,6 @@ angular.module("app.gameList", ["app.SocketManager"])
 				if (message.data) {
 					console.log("You joined game: ", message.data);
 					updateList();	
-				} else {
-					console.log("Can't join this game");
 				}
 			break;
 		}
@@ -47,7 +45,6 @@ angular.module("app.gameList", ["app.SocketManager"])
 	});
 
 	var updateList = function () {
-		console.log("Asking for game list...asdf");
 		SocketManager.sendTo("gameList", "GAME_LIST");
 	};
 
@@ -58,8 +55,10 @@ angular.module("app.gameList", ["app.SocketManager"])
 .directive("gameList", function (){
 	return {
     restrict: "E",
-    scope: true,
     controller: "gameListCtrl",
+    scope: {
+    	messageHandler: "="
+    },
     // two bars in each graph
     templateUrl: "app/directives/gameList/gameList.tpl.html"
    };
