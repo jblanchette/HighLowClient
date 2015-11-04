@@ -16,6 +16,12 @@ angular.module("app", [
         handlers: ["GAME_LIST", "JOIN_GAME"]
     });
 
+    var chat = SocketManager.create({
+        id: "chat",
+        url: "http://localhost:8080/chat",
+        handlers: ["JOIN_ROOM", "MEMBER_JOINED", "MEMBER_LEFT", "ROOM_KICKED", "ROOM_MSG"]
+    });
+
     gameList.connect();
 })
 
