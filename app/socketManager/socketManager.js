@@ -11,6 +11,7 @@ angular.module("app.SocketManager", [])
 		this.id = options.id;
 		this.url = options.url;
 		this.handlers = options.handlers;
+		this.onConnect = options.onConnect;
 		this.instance = null;
 	}
 
@@ -25,8 +26,12 @@ angular.module("app.SocketManager", [])
 	WSocket.prototype.setupHandlers = function () {
 		var self = this;
 
-		self.instance.on("connection", function (socket) {
-			console.log("I connected: ", socket);
+		self.instance.on("connect", function (socket) {
+			console.log("Socket connected: ", self.id);
+
+			if (_.isFunction(self.onConnect)) {
+				self.onConnect(socket);
+			}
 		});
 
 		_.each(this.handlers, function (handlerKey) {
@@ -37,6 +42,10 @@ angular.module("app.SocketManager", [])
 	};
 
 	WSocket.prototype.sendTo = function (key, data) {
+		this.instance.emit(key, data);
+	};
+
+	WSocket.prototype.sendToRoom = function (room, key, data) {
 		this.instance.emit(key, data);
 	};
 
@@ -75,11 +84,22 @@ angular.module("app.SocketManager", [])
 		if (wSocket) {
 			wSocket.sendTo(key, data);
 		}
-	}
+	};
+
+	var sendToRoom = function (id, room, key, data) {
+		var wSocket = get(id);
+
+		console.log("sending to room: ", id, room, key, data);
+		if (wSocket) {
+			console.log("Wsocket: ", wSocket);
+			wSocket.sendToRoom(room, key, data);
+		}
+	};
 
 	return {
 		create: create,
 		get: get,
-		sendTo: sendTo
+		sendTo: sendTo,
+		sendToRoom: sendToRoom
 	};
 });

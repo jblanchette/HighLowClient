@@ -6,12 +6,16 @@ angular.module("app.chatWindow", ["app.SocketManager"])
     input: ""
   };
 
+  console.log("Chat nsp: ", $scope.nsp);
+
   var listener = $scope.$on("socket:" + $scope.nsp + ":message", function (e, data) {
     $scope.handleSocketMessage(e, data);
   });
 
   $scope.sendMessage = function () {
     console.log("Sending message: ", $scope.chatForm.input);
+    var message = $scope.chatForm.input || "";
+    SocketManager.sendToRoom("chat", $scope.roomId, "ROOM_MSG", { message: message });
   };
 
   $scope.newMessage = function (message) {
@@ -31,6 +35,15 @@ angular.module("app.chatWindow", ["app.SocketManager"])
       break;
       case "USER_LEFT":
         $scope.userLeft(message.data);
+      break;
+      case "JOIN_GLOBAL":
+        console.log("Join global chat!", message.data);
+        var room = message.data;
+        console.log("Room: ", room);
+        SocketManager.sendToRoom("chat", room.id, "ROOM_MSG", { roomId: room.id, message: "hello world!" });
+      break;
+      default:
+        console.log("Got some non handled message: ", message.data);
       break;
     }
   };
