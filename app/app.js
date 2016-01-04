@@ -2,6 +2,7 @@ angular.module("app", [
 	"ui.router",
     // modules
 	"app.Home",
+    "app.States",
     // directives
     "app.chatWindow",
 	"app.gameList",
@@ -24,18 +25,4 @@ angular.module("app", [
 
     gameList.connect();
     chat.connect();
-})
-
-.config(
-  [          '$stateProvider', '$urlRouterProvider',
-    function ($stateProvider,   $urlRouterProvider) {
-    	$urlRouterProvider.otherwise("/");
-
-    	$stateProvider.state("home", {
-    		url: "/",
-    		templateUrl: "app/home/home.tpl.html",
-    		controller: "HomeCtrl"
-    	});
-    }
-  ]
-);
+});

@@ -19,15 +19,15 @@ angular.module("app.chatWindow", ["app.SocketManager"])
   };
 
   $scope.newMessage = function (message) {
-    console.log("Called new message?");
-    $scope.addMessage(message.author + ": " + message.text);
+    console.log("Called new message?", message);
+    $scope.addMessage(message);
   };
 
   $scope.handleSocketMessage = function (e, message) {
     console.log("Got chat msg: ", e, message);
 
     switch (message.key) {
-      case "NEW_MSG":
+      case "ROOM_MSG":
         $scope.newMessage(message.data);
       break;
       case "USER_JOINED":
@@ -37,10 +37,14 @@ angular.module("app.chatWindow", ["app.SocketManager"])
         $scope.userLeft(message.data);
       break;
       case "JOIN_GLOBAL":
-        console.log("Join global chat!", message.data);
         var room = message.data;
-        console.log("Room: ", room);
-        SocketManager.sendToRoom("chat", room.id, "ROOM_MSG", { roomId: room.id, message: "hello world!" });
+
+        console.log("Sending test chat message to global...");
+        SocketManager.sendToRoom("chat", room.id, "ROOM_MSG", { 
+          memberId: SocketManager.get("chat").getSocketId(), 
+          roomId: room.id, 
+          message: "hello world!" 
+        });
       break;
       default:
         console.log("Got some non handled message: ", message.data);

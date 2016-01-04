@@ -41,6 +41,10 @@ angular.module("app.SocketManager", [])
 		});
 	};
 
+	WSocket.prototype.getSocketId = function () { 
+		return this.instance.id;
+	};
+
 	WSocket.prototype.sendTo = function (key, data) {
 		this.instance.emit(key, data);
 	};
