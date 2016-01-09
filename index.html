@@ -11,10 +11,17 @@
 		<script src="node_modules/angular-ui-router/release/angular-ui-router.js"></script>
 
 		<script src="app/app.js"></script>
+		<script src="app/states.js"></script>
+		<!-- Directives -->
 		<script src="app/directives/chatWindow/chatWindow.js"></script>
 		<script src="app/directives/gameList/gameList.js"></script>
-		<script src="app/home/home.js"></script>
+		<script src="app/directives/gameList/gameList.js"></script>
+		<!-- Services -->
+		<script src="app/services/authentication.js"></script>
 		<script src="app/socketManager/socketManager.js"></script>
+		<!-- Controllers -->
+		<script src="app/login/login.js"></script>
+		<script src="app/home/home.js"></script>
 		
 		<title ng-bind="$state.current.name + ' - ui-router'">ui-router</title>
 	</head>

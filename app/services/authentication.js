@@ -9,4 +9,4 @@ angular.module("app.Authentication", [])
   return {
     refreshUser: refreshUser
   };
-})
+});

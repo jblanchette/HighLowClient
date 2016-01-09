@@ -1,11 +1,12 @@
 angular.module("app.States", [
-  "ui.router"
+  "ui.router",
+  "app.Authentication"
 ])
 
 .config(
   [          '$stateProvider', '$urlRouterProvider',
     function ($stateProvider,   $urlRouterProvider) {
-      $urlRouterProvider.otherwise("/");
+      $urlRouterProvider.otherwise("/login");
 
       $stateProvider.state("login", {
         url: "/login",
@@ -29,8 +30,13 @@ angular.module("app.States", [
         }
       });
 
-      $stateProvider.state("home", {
-        url: "/",
+      $stateProvider.decorator("isAuthorized", function (state) {
+        console.log(state.name);
+      });
+
+
+      $stateProvider.state("auth.home", {
+        url: "/home",
         templateUrl: "app/home/home.tpl.html",
         controller: "HomeCtrl"
       });

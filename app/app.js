@@ -1,7 +1,10 @@
 angular.module("app", [
 	"ui.router",
+    // services
+    "app.Authentication",
     // modules
 	"app.Home",
+    "app.Login",
     "app.States",
     // directives
     "app.chatWindow",
