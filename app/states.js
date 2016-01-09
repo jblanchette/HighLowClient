@@ -1,12 +1,23 @@
-angular.module("app.States", [
-  "ui.router",
-  "app.Authentication"
-])
+angular.module("app.States", ["ui.router"])
 
-.config(
-  [          '$stateProvider', '$urlRouterProvider',
-    function ($stateProvider,   $urlRouterProvider) {
+.config([
+  '$stateProvider', 
+  '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
       $urlRouterProvider.otherwise("/login");
+
+      $stateProvider.decorator("isAuthorized", function (state) {
+        if (_.startsWith(state.name, "auth.")) {
+          console.log("Got an auth state: ", state.name);
+
+          state.resolve = state.resolve || {};
+          state.resolve.authenticate = ['authentication', function (authentication) {
+            return authentication.verifySession();
+          }];
+        }
+
+        return state;
+      });
 
       $stateProvider.state("login", {
         url: "/login",
@@ -18,7 +29,7 @@ angular.module("app.States", [
         abstract: true,
         templateUrl: "app/auth.tpl.html",
         controller: function ($scope, $rootScope) {
-
+          console.log("Running auth controller?");
         },
         resolve: {
           authenticatedUser: function ($q, authentication) {
@@ -29,11 +40,6 @@ angular.module("app.States", [
           }
         }
       });
-
-      $stateProvider.decorator("isAuthorized", function (state) {
-        console.log(state.name);
-      });
-
 
       $stateProvider.state("auth.home", {
         url: "/home",

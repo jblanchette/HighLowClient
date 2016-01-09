@@ -13,19 +13,11 @@ angular.module("app", [
 	"app.SocketManager"
 ])
 
-.run(function (SocketManager) {
-	var gameList = SocketManager.create({
-        id: "gameList",
-        url: "http://localhost:8080/gameList",
-        handlers: ["GAME_LIST", "JOIN_GAME"]
+.run(function ($rootScope, $state) {
+    $rootScope.$on('$stateChangeError', function(e, toState, toParams, fromState, fromParams, error){
+        if (error === "Not Authorized") {
+          console.log("Not auth, moving to login.");
+          $state.go("login");
+        }
     });
-
-    var chat = SocketManager.create({
-        id: "chat",
-        url: "http://localhost:8080/chat",
-        handlers: ["JOIN_ROOM", "JOIN_GLOBAL", "MEMBER_JOINED", "MEMBER_LEFT", "ROOM_KICKED", "ROOM_MSG"]
-    });
-
-    gameList.connect();
-    chat.connect();
 });
