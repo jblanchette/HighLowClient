@@ -4,6 +4,10 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
   var authUser = authentication.getUser();
   console.log("in home ctrl: ", authUser);
 
+  if (!authUser) {
+    console.log("No authorized user, going back to login...");
+  }
+
   var init = function () {
     var gameList = SocketManager.create({
         id: "gameList",

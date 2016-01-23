@@ -1,14 +1,19 @@
-angular.module("app.Authentication", [])
+angular.module("app.Authentication", ["app.SocketManager"])
 
-.factory("authentication", function ($q) {
+.factory("authentication", function ($q, SocketManager) {
   var user;
 
   var loginUser = function (username, password) {
     user = {
-      id: _.random(1, 100000000),
       username: username,
       password: password
     };
+
+    SocketManager.sendTo("login", "LOGIN", user);
+  };
+
+  var authorizeUser = function (user) {
+    user = user;
 
     return user;
   };
@@ -31,6 +36,7 @@ angular.module("app.Authentication", [])
 
   return {
     getUser: getUser,
+    authorizeUser: authorizeUser,
     loginUser: loginUser,
     refreshUser: refreshUser,
     verifySession: verifySession
