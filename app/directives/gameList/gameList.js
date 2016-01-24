@@ -1,5 +1,9 @@
-angular.module("app.gameList", ["app.SocketManager"])
-.controller("gameListCtrl", function ($timeout, $scope, SocketManager) {
+angular.module("app.gameList", [
+	"app.SocketManager",
+	"app.Authentication"
+])
+.controller("gameListCtrl", function ($timeout, $scope, SocketManager, authentication) {
+	var authUser = authentication.getUser();
 	$scope.games = [];	
 
 	$scope.handleSocketMessage = function (e, message) {
@@ -20,15 +24,10 @@ angular.module("app.gameList", ["app.SocketManager"])
 	$scope.joinGame = function (gameId) {
 		var gameInfo = {
 			gameId: gameId,
-			member: {
-				id: 1,
-				name: "Jeef",
-				mvp: true // dats right
-			}
+			member: authUser
 		};
 
 		console.log("Joining game...", gameInfo);
-
 		SocketManager.sendTo("gameList", "JOIN_GAME", gameInfo);
 	};
 

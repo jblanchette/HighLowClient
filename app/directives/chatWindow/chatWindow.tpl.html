@@ -1,6 +1,10 @@
 <div class="chat-window-wrapper">
   <div class="chat-members"></div>
-  <div class="chat-messages"></div>
+  <div class="chat-messages">
+    <div ng-repeat="message in messageQueue" class="chat-message">
+      <strong>[{{message.author }}]:</strong> {{ message.message }}
+    </div>
+  </div>
 
   <div class="chat-input-wrapper">
     <input type="text" name="chatInput" ng-model="chatForm.input">

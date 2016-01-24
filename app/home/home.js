@@ -9,6 +9,10 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
   }
 
   var init = function () {
+    if (SocketManager.get("gameList") || SocketManager.get("chat")) {
+      return;
+    }
+
     var gameList = SocketManager.create({
         id: "gameList",
         url: "http://localhost:8080/gameList",
@@ -18,12 +22,13 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
     var chat = SocketManager.create({
         id: "chat",
         url: "http://localhost:8080/chat",
-        handlers: ["JOIN_ROOM", "JOIN_GLOBAL", "MEMBER_JOINED", "MEMBER_LEFT", "ROOM_KICKED", "ROOM_MSG"]
+        handlers: ["JOIN_ROOM", "JOIN_GLOBAL", "USER_JOINED", "USER_LEFT", "ROOM_KICKED", "ROOM_MSG"]
     });
 
     gameList.connect();
     chat.connect();
   };
+
   init();
 
 	$scope.gameListHandler = function (e, data) {

@@ -1,6 +1,6 @@
 angular.module("app.SocketManager", [])
 
-.factory("SocketManager", function ($rootScope) {
+.factory("SocketManager", function ($state, $rootScope, $log) {
 	var sockets = {};
 
 	function WSocket (options) {
@@ -34,8 +34,15 @@ angular.module("app.SocketManager", [])
 			}
 		});
 
+		console.log("Setting up handlers: ", this.handlers);
 		_.each(this.handlers, function (handlerKey) {
-			self.instance.on(handlerKey, function (data) { 
+			self.instance.on("UNAUTHORIZED", function (data) {
+				$log.warn("Unauthorized user: ", data);
+				$state.go("login");
+			});
+
+			self.instance.on(handlerKey, function (data) {
+				console.log("GOT SOCKET HANDLER: ", handlerKey); 
 				emitMessage(self.id, handlerKey, data); 
 			});
 		});

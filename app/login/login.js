@@ -6,7 +6,12 @@ angular.module("app.Login", [
 .controller("LoginCtrl", function ($state, $scope, $timeout, authentication, SocketManager) {
   console.log("Running login ctrl.");
 
-  var init = function () { 
+  var init = function () {
+    if (SocketManager.get("login")) {
+      console.log("not making login twice");
+      return;
+    } 
+
     console.log("Connecting to login server");
     var loginChannel = SocketManager.create({
       id: "login",
@@ -39,12 +44,6 @@ angular.module("app.Login", [
         } else {
           authentication.authorizeUser(message.data);
           $state.go("auth.home");
-        }
-      break;
-      case "JOIN_GAME":
-        if (message.data) {
-          console.log("You joined game: ", message.data);
-          updateList(); 
         }
       break;
     }

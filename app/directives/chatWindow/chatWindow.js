@@ -1,7 +1,10 @@
-angular.module("app.chatWindow", ["app.SocketManager"])
+angular.module("app.chatWindow", [
+  "app.SocketManager",
+  "app.Authentication"
+])
 
-.controller("chatWindowCtrl", function ($scope, SocketManager) {
-  var members = {};
+.controller("chatWindowCtrl", function ($timeout, $scope, SocketManager, authentication) {
+  $scope.currentRoom = null;
   $scope.chatForm = {
     input: ""
   };
@@ -9,13 +12,16 @@ angular.module("app.chatWindow", ["app.SocketManager"])
   console.log("Chat nsp: ", $scope.nsp);
 
   var listener = $scope.$on("socket:" + $scope.nsp + ":message", function (e, data) {
-    $scope.handleSocketMessage(e, data);
+    $timeout(function () {
+      $scope.handleSocketMessage(e, data);
+    });
   });
 
   $scope.sendMessage = function () {
     console.log("Sending message: ", $scope.chatForm.input);
     var message = $scope.chatForm.input || "";
-    SocketManager.sendToRoom("chat", $scope.roomId, "ROOM_MSG", { message: message });
+    SocketManager.sendToRoom("chat", $scope.nsp, "ROOM_MSG", { id: $scope.currentRoom.id, message: message });
+    $scope.chatForm.input = "";
   };
 
   $scope.newMessage = function (message) {
@@ -31,20 +37,25 @@ angular.module("app.chatWindow", ["app.SocketManager"])
         $scope.newMessage(message.data);
       break;
       case "USER_JOINED":
-        $scope.userJoined(message.data);
+        $scope.addMessage({
+          authorId: -1,
+          author: "Server",
+          message: "Other user joined: " + JSON.stringify(message.data)
+        });
       break;
       case "USER_LEFT":
         $scope.userLeft(message.data);
       break;
       case "JOIN_GLOBAL":
-        var room = message.data;
-
-        console.log("Sending test chat message to global...");
-        SocketManager.sendToRoom("chat", room.id, "ROOM_MSG", { 
-          memberId: SocketManager.get("chat").getSocketId(), 
-          roomId: room.id, 
-          message: "hello world!" 
+        
+        $scope.currentRoom = message.data;
+        console.log("*** about to add room msg: ", message.data);
+        $scope.addMessage({
+          authorId: -1,
+          author: "Server",
+          message: "You joined: " + JSON.stringify(message.data)
         });
+        
       break;
       default:
         console.log("Got some non handled message: ", message.data);
@@ -59,7 +70,7 @@ angular.module("app.chatWindow", ["app.SocketManager"])
   });
 })
 
-.directive("chatWindow", function ($compile) {
+.directive("chatWindow", function (SocketManager, authentication) {
   return {
     restrict: "E",
     scope: {
@@ -70,11 +81,26 @@ angular.module("app.chatWindow", ["app.SocketManager"])
     templateUrl: "app/directives/chatWindow/chatWindow.tpl.html",
     link: function (scope, element, attrs) {
       var el = angular.element(element);
+      scope.messageQueue = [];
+      scope.maxLineCount = 20;
+
+      console.log("*** RUNNING CHAT WINDOW LINK ***");
+
+      if (!scope.currentRoom && scope.nsp === "chat") {
+        var authUser = authentication.getUser();
+        if (authUser) {
+          console.log("Asking server to put us in a global chat");
+          SocketManager.sendToRoom(scope.nsp, scope.nsp, "JOIN_GLOBAL", authUser);
+        }
+      }
 
       scope.addMessage = function (message) {
-        var msgEl = angular.element("<div class='chat-message'>" + message + "</div>");
-        $compile(msgEl)(scope);
-        el.append(msgEl);
+        console.log("Adding msg: ", message);
+        if (scope.messageQueue.length > scope.maxLineCount) {
+          scope.messageQueue.shift();
+        }
+
+        scope.messageQueue.push(message);
       };
     }
   };
