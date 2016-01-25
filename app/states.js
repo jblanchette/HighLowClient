@@ -46,6 +46,12 @@ angular.module("app.States", ["ui.router"])
         templateUrl: "app/home/home.tpl.html",
         controller: "HomeCtrl"
       });
+
+      $stateProvider.state("auth.game", {
+        url: "/game",
+        templateUrl: "app/game/game.tpl.html",
+        controller: "GameCtrl"
+      });
     }
   ]
 );

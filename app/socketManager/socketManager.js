@@ -36,6 +36,11 @@ angular.module("app.SocketManager", [])
 
 		console.log("Setting up handlers: ", this.handlers);
 		_.each(this.handlers, function (handlerKey) {
+			self.instance.on("disconnect", function (reason) {
+				$log.warn("Server disconnected", reason);
+				$state.go("login");
+			});
+
 			self.instance.on("UNAUTHORIZED", function (data) {
 				$log.warn("Unauthorized user: ", data);
 				$state.go("login");
