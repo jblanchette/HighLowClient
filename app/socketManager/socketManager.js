@@ -47,7 +47,7 @@ angular.module("app.SocketManager", [])
 			});
 
 			self.instance.on(handlerKey, function (data) {
-				console.log("GOT SOCKET HANDLER: ", handlerKey); 
+				console.log("GOT SOCKET HANDLER: ", self.id, handlerKey); 
 				emitMessage(self.id, handlerKey, data); 
 			});
 		});

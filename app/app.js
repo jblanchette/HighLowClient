@@ -2,7 +2,9 @@ angular.module("app", [
 	"ui.router",
     // services
     "app.Authentication",
+    "app.GameManager",
     // modules
+    "app.Game",
 	"app.Home",
     "app.Login",
     "app.States",

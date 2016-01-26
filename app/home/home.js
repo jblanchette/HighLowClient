@@ -16,7 +16,7 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
     var gameList = SocketManager.create({
         id: "gameList",
         url: "http://localhost:8080/gameList",
-        handlers: ["GAME_LIST", "JOIN_GAME"]
+        handlers: ["GAME_LIST", "JOIN_GAME", "LEFT_GAME", "USER_JOINED", "USER_LEFT"]
     });
 
     var chat = SocketManager.create({

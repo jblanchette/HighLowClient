@@ -1,8 +1,9 @@
 angular.module("app.gameList", [
 	"app.SocketManager",
-	"app.Authentication"
+	"app.Authentication",
+	"app.GameManager"
 ])
-.controller("gameListCtrl", function ($timeout, $scope, SocketManager, authentication) {
+.controller("gameListCtrl", function ($timeout, $state, $scope, SocketManager, gameManager, authentication) {
 	var authUser = authentication.getUser();
 	$scope.games = [];	
 
@@ -25,9 +26,31 @@ angular.module("app.gameList", [
 					console.log("You joined game: ", message.data);
 					$scope.modal.isOpen = false;
 
-					// go to game state
+					gameManager.setGameInfo(message.data);
+					$state.go("auth.game");
 				}
 			break;
+
+			case "USER_JOINED":
+				console.log("A user joined a game: ", message.data);
+				updateGame(message.data);
+			break;
+
+			case "USER_LEFT":
+				console.log("A user left a game: ", message.data);
+				updateGame(message.data);
+			break;
+		}
+	};
+
+	var updateGame = function (newGame) {
+		var gameIndex = _.findKey($scope.games, function (g) {
+			return g.id === newGame.id;
+		});
+
+		if (!!gameIndex) {
+			console.log("Updating game index: ", gameIndex);
+			$scope.games[gameIndex] = newGame;
 		}
 	};
 

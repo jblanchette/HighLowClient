@@ -1,0 +1,7 @@
+<div class="game">
+  Game Name: {{ currentGame.gameName }} <br>
+  Members: <br>
+  <div ng-repeat="member in currentGame.members">
+    {{ member.id }}: {{ member.nickname }}
+  </div>
+</div>
