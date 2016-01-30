@@ -8,7 +8,8 @@
   }],
   "dependencies": {
     "angular": "1.2.29",
-    "angular-ui-router": "0.2.15"
+    "angular-ui-router": "0.2.15",
+    "http-server": "*"
   },
   "license": "MIT"
 }
