@@ -1,0 +1,14 @@
+{
+  "name": "highlowjack", 
+  "version": "0.0.0",
+  "description": "An online card game client for High-Low-Jack",
+  "contributors": [{
+    "name": "Jeff Blanchette",
+    "email": "jeffblanchette5@gmail.com"
+  }],
+  "dependencies": {
+    "angular": "1.2.29",
+    "angular-ui-router": "0.2.15"
+  },
+  "license": "MIT"
+}
