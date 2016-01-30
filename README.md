@@ -1,10 +1,17 @@
 # HighLowClient
+
 Client for a High Low Jack card game
 
-Install `http-server` from npm
+## Installation
 
-Point http-server at the directory you unpacked the client into.
+Run `npm install` inside the cloned repository
 
-Make sure you don't use port `8080` because the server currently expects to use it.
+## Running the client
 
-Navigate to the page `http-server` says it's hosting at.
+- Run the [node.js high low server](https://github.com/jblanchette/HighLowServer)
+
+- Run `http-client -p 8081
+
+  **__Make sure you don't use port `8080` because the server currently expects to use it.__**
+
+- Navigate to the url `http-server` says it is hosting
