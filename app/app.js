@@ -2,6 +2,7 @@ angular.module("app", [
 	"ui.router",
     // services
     "app.Authentication",
+    "app.ChatManager",
     "app.GameManager",
     // modules
     "app.Game",

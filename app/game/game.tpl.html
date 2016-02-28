@@ -1,7 +1,31 @@
 <div class="game">
-  Game Name: {{ currentGame.gameName }} <br>
+  <h3>Game Name: {{ currentGame.gameName }}</h3>
   Members: <br>
   <div ng-repeat="member in currentGame.members">
     {{ member.id }}: {{ member.nickname }}
+  </div>
+
+  <div class="controls">
+    <button
+      type="button"
+      ng-show="currentGame.hostId === authUser.id"
+      ng-click="startGame()">
+      Start Game
+    </button>
+    <button
+      type="button"
+      ng-click="setReadyState(true)">
+      Ready up
+    </button>
+
+    <button
+      type="button"
+      ng-click="setReadyState(false)">
+      Busy
+    </button>
+  </div>
+
+  <div class="chat-wrapper">
+    <chat-window></chat-window>
   </div>
 </div>

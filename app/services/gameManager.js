@@ -11,6 +11,14 @@ angular.module("app.GameManager", [])
     return currentGame;
   };
 
+  var setGameAttr = function (attr, val) {
+    if (!currentGame) {
+      return;
+    }
+
+    currentGame[attr] = val;
+  };
+
   var getCurrentGame = function () {
     return currentGame;
   };

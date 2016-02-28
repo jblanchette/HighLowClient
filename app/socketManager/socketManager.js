@@ -8,6 +8,8 @@ angular.module("app.SocketManager", [])
 			throw new Error("WSocket missing url or id: " + options);
 		}
 
+		console.log("Making websocket: ", options);
+
 		this.id = options.id;
 		this.url = options.url;
 		this.handlers = options.handlers;
@@ -27,8 +29,6 @@ angular.module("app.SocketManager", [])
 		var self = this;
 
 		self.instance.on("connect", function (socket) {
-			console.log("Socket connected: ", self.id);
-
 			if (_.isFunction(self.onConnect)) {
 				self.onConnect(socket);
 			}
@@ -47,7 +47,8 @@ angular.module("app.SocketManager", [])
 			});
 
 			self.instance.on(handlerKey, function (data) {
-				console.log("GOT SOCKET HANDLER: ", self.id, handlerKey); 
+				console.log("GOT SOCKET HANDLER: ", self.id, handlerKey);
+				
 				emitMessage(self.id, handlerKey, data); 
 			});
 		});
@@ -58,10 +59,6 @@ angular.module("app.SocketManager", [])
 	};
 
 	WSocket.prototype.sendTo = function (key, data) {
-		this.instance.emit(key, data);
-	};
-
-	WSocket.prototype.sendToRoom = function (room, key, data) {
 		this.instance.emit(key, data);
 	};
 
@@ -102,20 +99,9 @@ angular.module("app.SocketManager", [])
 		}
 	};
 
-	var sendToRoom = function (id, room, key, data) {
-		var wSocket = get(id);
-
-		console.log("sending to room: ", id, room, key, data);
-		if (wSocket) {
-			console.log("Wsocket: ", wSocket);
-			wSocket.sendToRoom(room, key, data);
-		}
-	};
-
 	return {
 		create: create,
 		get: get,
-		sendTo: sendTo,
-		sendToRoom: sendToRoom
+		sendTo: sendTo
 	};
 });
