@@ -15,6 +15,8 @@ angular.module("app.Game", [
   $scope.currentGame = null;
   $scope.isHost = false;
 
+  var gameSocket;
+
   var inGame = function () {
     return !!$scope.currentGame;
   };
@@ -32,7 +34,7 @@ angular.module("app.Game", [
       gameId: $scope.currentGame.id
     };
 
-    SocketManager.sendTo("game", "startGame", msg);
+    SocketManager.sendTo("gameList", "START_GAME", msg);
   };
 
   $scope.setReadyState = function (state) {
@@ -45,12 +47,22 @@ angular.module("app.Game", [
     };
     var msgKey = state ? "USER_READY" : "USER_BUSY";
 
-    SocketManager.sendTo("game", msgKey, msg);
+    SocketManager.sendTo("gameList", msgKey, msg);
   };
 
   //
   // WebSocket handler
   //
+
+  $scope.handleGameListMessage = function (e, message) {
+    console.log("Handling gameList msg: ", e, message);
+    switch(message.key) {
+      case "GAME_STARTED":
+        console.log("Got a game started signal");
+        connectToGame();
+      break;
+    }
+  };
 
   $scope.handleGameMessage = function (e, message) {
     console.log("Handling game msg: ", e, message);
@@ -81,11 +93,11 @@ angular.module("app.Game", [
   };
 
   var setupConnection = function () {
-    if (SocketManager.get("game")) {
+    if (gameSocket || SocketManager.get("game")) {
       return;
     }
 
-    var game = SocketManager.create({
+    gameSocket = SocketManager.create({
         id: "game",
         url: "http://localhost:8080/game",
         handlers: [
@@ -94,13 +106,27 @@ angular.module("app.Game", [
           "USER_READY", "USER_BUSY", "GAME_INFO", "GAME_STEP"
         ]
     });
+  };
 
-    game.connect();
+  var connectToGame = function () {
+    if (!gameSocket) {
+      return;
+    }
+
+    gameSocket.connect();
   };
 
   var gameListener = $scope.$on("socket:game:message", function (e, data) {
     $timeout(function () {
       $scope.handleGameMessage(e, data);
+    });
+  });
+
+  var listListener = $scope.$on("socket:gameList:message", function (e, data) {
+    console.log("Recieved a message: ", e, data);
+
+    $timeout(function () {
+      $scope.handleGameListMessage(e, data);
     });
   });
 

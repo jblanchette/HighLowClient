@@ -8,8 +8,6 @@ angular.module("app.States", ["ui.router"])
 
       $stateProvider.decorator("isAuthorized", function (state) {
         if (_.startsWith(state.name, "auth.")) {
-          console.log("Got an auth state: ", state.name);
-
           state.resolve = state.resolve || {};
           state.resolve.authenticate = ['authentication', function (authentication) {
             return authentication.verifySession();
@@ -29,7 +27,7 @@ angular.module("app.States", ["ui.router"])
         abstract: true,
         templateUrl: "app/auth.tpl.html",
         controller: function ($scope, $rootScope) {
-          console.log("Running auth controller?");
+          console.log("uhh?");
         },
         resolve: {
           authenticatedUser: function ($q, authentication) {

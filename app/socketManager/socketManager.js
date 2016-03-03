@@ -59,6 +59,11 @@ angular.module("app.SocketManager", [])
 	};
 
 	WSocket.prototype.sendTo = function (key, data) {
+		if (!this.instance) {
+			console.error("Tried to send a message to a non-existing socket: ", this, key, data);
+			return;
+		}
+
 		this.instance.emit(key, data);
 	};
 

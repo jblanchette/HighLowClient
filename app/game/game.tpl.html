@@ -1,31 +1,49 @@
 <div class="game">
-  <h3>Game Name: {{ currentGame.gameName }}</h3>
-  Members: <br>
-  <div ng-repeat="member in currentGame.members">
-    {{ member.id }}: {{ member.nickname }}
-  </div>
+  <div class="game-content">
+    <div class="banner">
+      <h3>Game Name: {{ currentGame.gameName }}</h3>
+      
+      <div>
+        Members: <br>
+        <div ng-repeat="member in currentGame.members">
+          {{ member.id }}: {{ member.nickname }}
+        </div>
+      </div>
+    </div>
 
-  <div class="controls">
-    <button
-      type="button"
-      ng-show="currentGame.hostId === authUser.id"
-      ng-click="startGame()">
-      Start Game
-    </button>
-    <button
-      type="button"
-      ng-click="setReadyState(true)">
-      Ready up
-    </button>
+    <div class="game-area">
+      Current game: 
+      {{ currentGame.hostId }}
 
-    <button
-      type="button"
-      ng-click="setReadyState(false)">
-      Busy
-    </button>
+      Me:
+
+      {{ authUser }}
+    </div>
+
+    <div class="controls">
+
+      <button
+        type="button"
+        ng-show="currentGame.hostId === authUser.id"
+        ng-click="startGame()">
+        Start Game
+      </button>
+      <button
+        type="button"
+        ng-click="setReadyState(true)">
+        Ready up
+      </button>
+
+      <button
+        type="button"
+        ng-click="setReadyState(false)">
+        Busy
+      </button>
+    </div>
   </div>
 
   <div class="chat-wrapper">
-    <chat-window></chat-window>
+    <chat-window class="game-chat">
+    </chat-window>
   </div>
 </div>

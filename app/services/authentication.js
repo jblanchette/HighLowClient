@@ -12,9 +12,8 @@ angular.module("app.Authentication", ["app.SocketManager"])
     SocketManager.sendTo("login", "LOGIN", user);
   };
 
-  var authorizeUser = function (user) {
-    user = user;
-
+  var authorizeUser = function (newUser) {
+    user = newUser;
     return user;
   };
 

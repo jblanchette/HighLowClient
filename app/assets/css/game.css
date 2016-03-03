@@ -1,6 +1,61 @@
 .game {
   margin: 0 auto;
   width: 70rem;
-  height: 35rem;
+  height: 40rem;
   border: 1px solid #333;
+}
+
+.game-content {
+  padding: 1rem;
+}
+
+.game .controls,
+.game .banner,
+.game .game-area {
+  width: 100%;
+}
+
+.game .controls {
+  height: 3rem;
+  text-align: center;
+}
+
+.game .controls button {
+  margin: 1rem 0;
+}
+
+.game .banner {
+  height: 4rem;
+}
+
+.banner h3 {
+  margin: 0;
+}
+
+
+.game-area div {
+  padding: 1rem;
+}
+
+
+.chat-wrapper {
+  width: 40rem;
+  height: 12rem;
+}
+
+chat-window.game-chat {
+  display: block;
+  border: 1px solid #333;
+  width: 40rem;
+  height: 12rem;
+}
+
+chat-window.game-chat .chat-messages {
+  padding: 0 1rem;
+  height: 10rem;
+  overflow-y: auto;
+}
+
+chat-window.game-chat .chat-input-wrapper {
+  padding: 0;
 }

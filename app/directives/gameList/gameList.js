@@ -40,6 +40,10 @@ angular.module("app.gameList", [
 				console.log("A user left a game: ", message.data);
 				updateGame(message.data);
 			break;
+
+			case "GAME_STARTED":
+				console.log("**** The game i'm in started!", message.data);
+			break;
 		}
 	};
 

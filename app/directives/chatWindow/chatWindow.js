@@ -5,11 +5,18 @@ angular.module("app.chatWindow", [
 ])
 
 .controller("chatWindowCtrl", function ($timeout, $scope, SocketManager, authentication) {
-  var listener = $scope.$on("socket:" + $scope.nsp + ":message", function (e, data) {
-    $timeout(function () {
-      $scope.handleSocketMessage(e, data);
+  
+  if ($scope.nsp) {
+    var listener = $scope.$on("socket:" + $scope.nsp + ":message", function (e, data) {
+      $timeout(function () {
+        $scope.handleSocketMessage(e, data);
+      });
     });
-  });
+
+    $scope.$on("$destroy", function () {
+      listener();
+    });
+  }
 
   $scope.handleSocketMessage = function (e, message) {
     console.log("Got chat msg: ", e, message);
@@ -43,10 +50,6 @@ angular.module("app.chatWindow", [
       break;
     }
   };
-
-  $scope.$on("$destroy", function () {
-    listener();
-  });
 })
 
 .directive("chatWindow", function (SocketManager, chatManager, authentication) {

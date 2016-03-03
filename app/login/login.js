@@ -42,6 +42,8 @@ angular.module("app.Login", [
         if (!message.data) {
           $scope.loginError = true;
         } else {
+
+          console.log("**** Got user from server: ", message.data);
           authentication.authorizeUser(message.data);
           $state.go("auth.home");
         }

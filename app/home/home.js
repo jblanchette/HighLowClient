@@ -31,7 +31,11 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
     var gameList = SocketManager.create({
         id: $scope.gameListNamespace,
         url: "http://localhost:8080/" + $scope.gameListNamespace,
-        handlers: ["GAME_LIST", "JOIN_GAME", "LEFT_GAME", "USER_JOINED", "USER_LEFT"]
+        handlers: [
+          "GAME_LIST", "JOIN_GAME", "LEFT_GAME",
+          "USER_JOINED", "USER_LEFT", "GAME_STARTED",
+          "GAME_INFO", "USER_READY", "USER_BUSY"
+        ]
     });
 
     var chat = SocketManager.create({
