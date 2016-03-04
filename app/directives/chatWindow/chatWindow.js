@@ -33,7 +33,11 @@ angular.module("app.chatWindow", [
         });
       break;
       case "USER_LEFT":
-        $scope.userLeft(message.data);
+        $scope.addMessage({
+          authorId: -1,
+          author: "Server",
+          message: "Other user left: " + JSON.stringify(message.data)
+        });
       break;
       case "JOIN_GLOBAL":
         $scope.currentRoom = message.data;

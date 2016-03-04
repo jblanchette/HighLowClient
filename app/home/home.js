@@ -34,7 +34,8 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
         handlers: [
           "GAME_LIST", "JOIN_GAME", "LEFT_GAME",
           "USER_JOINED", "USER_LEFT", "GAME_STARTED",
-          "GAME_INFO", "USER_READY", "USER_BUSY"
+          "GAME_INFO", "USER_READY", "USER_BUSY",
+          "GAME_NOT_READY", "ROOM_MSG"
         ]
     });
 

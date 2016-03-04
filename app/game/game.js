@@ -12,7 +12,7 @@ angular.module("app.Game", [
     console.log("No authorized user, going back to login...");
   }
 
-  $scope.currentGame = null;
+  $scope.currentGame = gameManager.getCurrentGame();
   $scope.isHost = false;
 
   var gameSocket;
@@ -50,6 +50,11 @@ angular.module("app.Game", [
     SocketManager.sendTo("gameList", msgKey, msg);
   };
 
+  $scope.getGameState = function () {
+    console.log("Cur game: ", $scope.currentGame);
+    return $scope.currentGame && $scope.currentGame.state;
+  };
+
   //
   // WebSocket handler
   //
@@ -59,6 +64,9 @@ angular.module("app.Game", [
     switch(message.key) {
       case "GAME_STARTED":
         console.log("Got a game started signal");
+        console.log("Game msg: ", message.data);
+
+        setGameInfo(message.data);
         connectToGame();
       break;
     }
@@ -69,13 +77,11 @@ angular.module("app.Game", [
     switch(message.key) {
       case "USER_JOINED":
         console.log("User joined game, updating info");
-        gameManager.setGameInfo(message.data);
-        updateGameInfo();
+        setGameInfo(message.data);
       break;
       case "USER_LEFT":
         console.log("User left game, updating");
-        gameManager.setGameInfo(message.data);
-        updateGameInfo();
+        setGameInfo(message.data);
       break;
       case "GAME_STARTED":
 
@@ -123,7 +129,7 @@ angular.module("app.Game", [
   });
 
   var listListener = $scope.$on("socket:gameList:message", function (e, data) {
-    console.log("Recieved a message: ", e, data);
+    console.log("Recieved a game list message: ", e, data);
 
     $timeout(function () {
       $scope.handleGameListMessage(e, data);
@@ -135,7 +141,9 @@ angular.module("app.Game", [
   //
 
   var setGameInfo = function (info) {
+    console.log("**** SETTING INFO: ", info);
     $scope.currentGame = gameManager.setGameInfo(info);
+    updateGameInfo();
   };
 
   var updateGameInfo = function () {
@@ -155,5 +163,6 @@ angular.module("app.Game", [
 
   $scope.$on("$destroy", function () {
     gameListener();
+    listListener();
   });
 });
