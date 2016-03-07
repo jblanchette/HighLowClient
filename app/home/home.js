@@ -1,6 +1,6 @@
 angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
 
-.controller("HomeCtrl", function ($state, $scope, authentication, SocketManager) { 
+.controller("HomeCtrl", function ($timeout, $state, $scope, authentication, SocketManager) { 
   var authUser = authentication.getUser();
   $scope.chatNamespace = "chat";
   $scope.gameListNamespace = "gameList";
@@ -19,14 +19,6 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
     } 
   };
 
-  $scope.chatHandler = function (chatInstance) {
-    $scope.chatInstance = chatInstance;
-  };
-
-	$scope.gameListHandler = function (e, data) {
-    console.log("Home got game list update: ", data);
-  };
-
   var init = function () {
     var gameList = SocketManager.get($scope.gameListNamespace);
     var chat = SocketManager.get($scope.chatNamespace);
@@ -43,6 +35,13 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
   };
 
   init();
+
+  $scope.$on("socket:" + $scope.chatNamespace + ":connect", function (e, data) {
+    console.log("Chat connected!", data);
+    $timeout(function () {
+      $scope.setupGlobalChat();
+    });
+  });
 
   $scope.$on("$destroy", function () {
 

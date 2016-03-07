@@ -73,8 +73,11 @@ angular.module("app.chatWindow", [
       };
 
       scope.sendMessage = function () {
+        console.log("Sending message?");
+
         var message = scope.chatForm.input || "";
         if (!scope.currentRoom) {
+          console.log("No room?");
           return;
         }
 
