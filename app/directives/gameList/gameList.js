@@ -22,13 +22,11 @@ angular.module("app.gameList", [
 				$scope.games = message.data;
 			break;
 			case "JOIN_GAME":
-				if (message.data) {
-					console.log("You joined game: ", message.data);
-					$scope.modal.isOpen = false;
+				console.log("You joined game: ", message.data);
+				$scope.modal.isOpen = false;
 
-					gameManager.setGameInfo(message.data);
-					$state.go("auth.game");
-				}
+				gameManager.setGameInfo(message.data);
+				$state.go("auth.game");
 			break;
 
 			case "USER_JOINED":
@@ -47,14 +45,16 @@ angular.module("app.gameList", [
 		}
 	};
 
-	var updateGame = function (newGame) {
+	var updateGame = function (data) {
 		var gameIndex = _.findKey($scope.games, function (g) {
-			return g.id === newGame.id;
+			return g.id === data.game.id;
 		});
 
 		if (!!gameIndex) {
 			console.log("Updating game index: ", gameIndex);
-			$scope.games[gameIndex] = newGame;
+			$scope.games[gameIndex] = data.game;
+		} else {
+			console.log("NOT UPDATING: ", data);
 		}
 	};
 
@@ -74,6 +74,11 @@ angular.module("app.gameList", [
 		SocketManager.sendTo("gameList", "JOIN_GAME", gameInfo);
 	};
 
+	var updateList = function () {
+		console.log("***** CALLING UPDATE LIST");
+		SocketManager.sendTo("gameList", "GAME_LIST");
+	};
+
 	var listener = $scope.$on("socket:gameList:message", function (e, data) {
 		console.log("Recieved a message: ", e, data);
 
@@ -82,15 +87,25 @@ angular.module("app.gameList", [
 		});
 	});
 
-	$scope.$on("$destroy", function () {
-		listener();
+	console.log("Setting up onconn listener...");
+	var onConnectListener = $scope.$on("socket:gameList:connect", function (e, data) {
+		console.log("*** Gamelist conn!");
+		updateList();
 	});
 
-	var updateList = function () {
-		SocketManager.sendTo("gameList", "GAME_LIST");
-	};
+	$scope.$on("$destroy", function () {
+		listener();
+		onConnectListener();
+	});
 
-	updateList();
+	var init = function () {
+		var gameListSocket = SocketManager.get("gameList");
+
+		if (gameListSocket && gameListSocket.isConnected) {
+			updateList();
+		}
+	};
+	init();
 
 })
 

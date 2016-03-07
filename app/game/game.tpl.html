@@ -28,12 +28,13 @@
 
       <button
         type="button"
-        ng-show="currentGame.hostId === authUser.id"
+        ng-show="isHost"
         ng-click="startGame()">
         Start Game
       </button>
       <button
         type="button"
+        ng-show="!isHost"
         ng-click="setReadyState(true)">
         Ready up
       </button>
@@ -46,7 +47,10 @@
     </div>
     
     <div class="chat-wrapper">
-      <chat-window nsp="gameList" class="game-chat">
+      <chat-window 
+        nsp="gameList" 
+        class="game-chat" 
+        handler="chatHandler">
       </chat-window>
     </div>
   </div>

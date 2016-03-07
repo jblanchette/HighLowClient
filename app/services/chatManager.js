@@ -21,6 +21,7 @@ angular.module("app.ChatManager", [
     }
     this.messageQueue.push(message);
 
+    console.log("Added message: ", this.messageQueue);
     return this.messageQueue;
   };
 

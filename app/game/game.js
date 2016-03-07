@@ -55,6 +55,10 @@ angular.module("app.Game", [
     return $scope.currentGame && $scope.currentGame.state;
   };
 
+  $scope.chatHandler = function (chatInstance) {
+    $scope.chatInstance = chatInstance;
+  };
+
   //
   // WebSocket handler
   //
@@ -66,8 +70,24 @@ angular.module("app.Game", [
         console.log("Got a game started signal");
         console.log("Game msg: ", message.data);
 
-        setGameInfo(message.data);
+        setGameInfo(message.data.game);
         connectToGame();
+      break;
+      case "USER_JOINED":
+        console.log("User joined game, updating info");
+        setGameInfo(message.data.game);
+      break;
+      case "USER_LEFT":
+        console.log("User left game, updating");
+        setGameInfo(message.data.game);
+      break;
+      case "USER_READY":
+        console.log("Got a ready msg: ", $scope);
+
+        $scope.chatInstance.addMessage({
+          author: "Server",
+          message: "User ready: " + message.data.focus.nickname
+        });
       break;
     }
   };
@@ -77,11 +97,11 @@ angular.module("app.Game", [
     switch(message.key) {
       case "USER_JOINED":
         console.log("User joined game, updating info");
-        setGameInfo(message.data);
+        setGameInfo(message.data.game);
       break;
       case "USER_LEFT":
         console.log("User left game, updating");
-        setGameInfo(message.data);
+        setGameInfo(message.data.game);
       break;
       case "GAME_STARTED":
 
@@ -103,15 +123,12 @@ angular.module("app.Game", [
       return;
     }
 
-    gameSocket = SocketManager.create({
-        id: "game",
-        url: "http://localhost:8080/game",
-        handlers: [
-          "START_GAME", "CLOSE_GAME", "GAME_STARTED", "JOIN_GAME", 
-          "LEFT_GAME", "USER_LEFT", "USER_JOINED", "KICK_MEMBER", 
-          "USER_READY", "USER_BUSY", "GAME_INFO", "GAME_STEP"
-        ]
-    });
+    gameSocket = SocketManager.get("game");
+
+    if (!gameSocket) {
+      // todo: handle errors here
+      console.error("Error getting websocket for /game");
+    }
   };
 
   var connectToGame = function () {
@@ -147,7 +164,10 @@ angular.module("app.Game", [
   };
 
   var updateGameInfo = function () {
-    $scope.currentGame = gameManager.getCurrentGame();
+    var curGame = gameManager.getCurrentGame();
+    curGame.isHost = curGame && curGame.hostId === $scope.authUser.id;
+
+    $scope.currentGame = curGame;
   };
 
   var init = function () {

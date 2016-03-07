@@ -29,14 +29,14 @@ angular.module("app.chatWindow", [
         $scope.addMessage({
           authorId: -1,
           author: "Server",
-          message: "Other user joined: " + JSON.stringify(message.data)
+          message: "Other user joined: " + message.data.focus.nickname
         });
       break;
       case "USER_LEFT":
         $scope.addMessage({
           authorId: -1,
           author: "Server",
-          message: "Other user left: " + JSON.stringify(message.data)
+          message: "Other user left: " + message.data.focus.nickname
         });
       break;
       case "JOIN_GLOBAL":
@@ -50,7 +50,7 @@ angular.module("app.chatWindow", [
         
       break;
       default:
-        console.log("Got some non handled message: ", message.data);
+        console.log("Got some non handled message: ", message.key, message.data);
       break;
     }
   };
@@ -60,25 +60,14 @@ angular.module("app.chatWindow", [
   return {
     restrict: "E",
     scope: {
-      nsp: "@"
+      nsp: "@",
+      handler: "=?"
     },
     controller: "chatWindowCtrl",
     // two bars in each graph
     templateUrl: "app/directives/chatWindow/chatWindow.tpl.html",
     link: function (scope, element, attrs) {
       var el = angular.element(element);
-
-      var init = function () {
-        scope.messageQueue = [];
-        scope.currentRoom = null;
-        scope.chatForm = {
-          input: ""
-        };
-
-        scope.instance = chatManager.create();
-      };
-      init();
-      
       scope.addMessage = function (message) {
         scope.messageQueue = scope.instance.addMessage(message);
       };
@@ -106,6 +95,21 @@ angular.module("app.chatWindow", [
       scope.clearInput = function () {
         scope.chatForm.input = "";
       };
+
+      var init = function () {
+        scope.messageQueue = [];
+        scope.currentRoom = null;
+        scope.chatForm = {
+          input: ""
+        };
+        scope.instance = chatManager.create();
+
+        if (_.isFunction(scope.handler)) {
+          console.log("Runing chat handler");
+          scope.handler(scope);
+        }
+      };
+      init();
     }
   };
 });

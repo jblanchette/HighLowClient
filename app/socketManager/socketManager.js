@@ -12,6 +12,7 @@ angular.module("app.SocketManager", [])
 
 		this.id = options.id;
 		this.url = options.url;
+		this.isConnected = false;
 		this.handlers = options.handlers;
 		this.onConnect = options.onConnect;
 		this.instance = null;
@@ -32,6 +33,10 @@ angular.module("app.SocketManager", [])
 			if (_.isFunction(self.onConnect)) {
 				self.onConnect(socket);
 			}
+
+			console.log("Emitting message on connect: socket:" + self.id + ":connect");
+			$rootScope.$broadcast("socket:" + self.id + ":connect", "connected");
+			self.isConnected = true;
 		});
 
 		console.log("Setting up handlers: ", this.handlers);
@@ -81,7 +86,8 @@ angular.module("app.SocketManager", [])
 	};
 
 	var get = function (id) {
-		return _.find(sockets, { id: id });
+		console.log("Getting: ", _.has(sockets, id) && sockets[id]);
+		return _.has(sockets, id) && sockets[id];
 	};
 
 	var create = function (o) {

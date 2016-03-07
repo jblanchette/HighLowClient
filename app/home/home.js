@@ -19,33 +19,25 @@ angular.module("app.Home", ["app.Authentication", "app.SocketManager"])
     } 
   };
 
+  $scope.chatHandler = function (chatInstance) {
+    $scope.chatInstance = chatInstance;
+  };
+
 	$scope.gameListHandler = function (e, data) {
     console.log("Home got game list update: ", data);
   };
 
   var init = function () {
-    if (SocketManager.get("gameList") || SocketManager.get("chat")) {
+    var gameList = SocketManager.get($scope.gameListNamespace);
+    var chat = SocketManager.get($scope.chatNamespace);
+
+    if (!gameList || !chat) {
+      // todo: handle possible errors here.  maybe they dont support ws
+      console.error("Error creating websockets.");
       return;
     }
 
-    var gameList = SocketManager.create({
-        id: $scope.gameListNamespace,
-        url: "http://localhost:8080/" + $scope.gameListNamespace,
-        handlers: [
-          "GAME_LIST", "JOIN_GAME", "LEFT_GAME",
-          "USER_JOINED", "USER_LEFT", "GAME_STARTED",
-          "GAME_INFO", "USER_READY", "USER_BUSY",
-          "GAME_NOT_READY", "ROOM_MSG"
-        ]
-    });
-
-    var chat = SocketManager.create({
-        id: $scope.chatNamespace,
-        url: "http://localhost:8080/" + $scope.chatNamespace,
-        handlers: ["JOIN_ROOM", "JOIN_GLOBAL", "USER_JOINED", "USER_LEFT", "ROOM_KICKED", "ROOM_MSG"],
-        onConnect: $scope.setupGlobalChat
-    });
-
+    console.log("*** CONNECTING TO GAMELIST AND CHAT");
     gameList.connect();
     chat.connect();
   };
