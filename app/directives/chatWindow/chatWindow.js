@@ -40,6 +40,7 @@ angular.module("app.chatWindow", [
         });
       break;
       case "JOIN_GLOBAL":
+      case "JOIN_ROOM":
         $scope.currentRoom = message.data;
         console.log("*** about to add room msg: ", message.data);
         $scope.addMessage({
@@ -47,7 +48,6 @@ angular.module("app.chatWindow", [
           author: "Server",
           message: "You joined: " + JSON.stringify(message.data)
         });
-        
       break;
       default:
         console.log("Got some non handled message: ", message.key, message.data);

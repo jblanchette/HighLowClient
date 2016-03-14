@@ -25,17 +25,17 @@ angular.module("app.gameList", [
 				console.log("You joined game: ", message.data);
 				$scope.modal.isOpen = false;
 
-				gameManager.setGameInfo(message.data);
+				gameManager.setGameInfo(message.data.game);
 				$state.go("auth.game");
 			break;
 
 			case "USER_JOINED":
-				console.log("A user joined a game: ", message.data);
+				console.log("A user joined a game: ", message.data.game);
 				updateGame(message.data);
 			break;
 
 			case "USER_LEFT":
-				console.log("A user left a game: ", message.data);
+				console.log("A user left a game: ", message.data.game);
 				updateGame(message.data);
 			break;
 

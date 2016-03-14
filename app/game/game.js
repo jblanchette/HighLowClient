@@ -50,11 +50,6 @@ angular.module("app.Game", [
     SocketManager.sendTo("gameList", msgKey, msg);
   };
 
-  $scope.getGameState = function () {
-    console.log("Cur game: ", $scope.currentGame);
-    return $scope.currentGame && $scope.currentGame.state;
-  };
-
   $scope.chatHandler = function (chatInstance) {
     $scope.chatInstance = chatInstance;
   };
@@ -74,20 +69,36 @@ angular.module("app.Game", [
         connectToGame();
       break;
       case "USER_JOINED":
-        console.log("User joined game, updating info");
         setGameInfo(message.data.game);
+
+        $scope.chatInstance.addMessage({
+          author: "Server",
+          message: "User joined: " + message.data.focus.nickname
+        });
       break;
       case "USER_LEFT":
-        console.log("User left game, updating");
         setGameInfo(message.data.game);
+
+        $scope.chatInstance.addMessage({
+          author: "Server",
+          message: "User left: " + message.data.focus.nickname
+        });
       break;
       case "USER_READY":
-        console.log("Got a ready msg: ", $scope);
-
         $scope.chatInstance.addMessage({
           author: "Server",
           message: "User ready: " + message.data.focus.nickname
         });
+      break;
+      case "USER_BUSY":
+        $scope.chatInstance.addMessage({
+          author: "Server",
+          message: "User busy: " + message.data.focus.nickname
+        });
+      break;
+      case "GAME_INFO":
+        console.log("*** SETTING GAME_INFO", message);
+        setGameInfo(message.data.game);
       break;
     }
   };
@@ -165,19 +176,24 @@ angular.module("app.Game", [
 
   var updateGameInfo = function () {
     var curGame = gameManager.getCurrentGame();
-    curGame.isHost = curGame && curGame.hostId === $scope.authUser.id;
+    var authUser = $scope.authUser; // more terse
+
+    if (curGame) {
+      var localOptions = {
+        isHost: curGame.hostId === authUser.id,
+        isReady: _.some(curGame.members, { id: authUser.id, ready: true })
+      };
+      
+      console.log("Local: ", localOptions);
+      curGame = _.merge(curGame, localOptions);
+    }
 
     $scope.currentGame = curGame;
   };
 
   var init = function () {
     setupConnection();
-    $scope.currentGame = gameManager.getCurrentGame();
-
-    if ($scope.currentGame.hostId === $scope.authUser.id) {
-      console.log("Setting user as host");
-      $scope.isHost = true;
-    }
+    updateGameInfo();
   };
   init();
 

@@ -13,28 +13,31 @@
 
     <div class="game-area">
       Current game: 
-      {{ currentGame.hostId }}
+      {{ currentGame.hostId }} <br>
 
       Me:
 
-      {{ authUser }}
+      {{ authUser }} <br>
 
-      Game state:
+      Am I Ready?: {{ currentGame.isReady }} <br>
 
-      {{ getGameState() }}
+      Game state: <br>
+
+      {{ currentGame }}
     </div>
 
     <div class="controls">
 
       <button
         type="button"
-        ng-show="isHost"
+        ng-show="currentGame.isHost"
         ng-click="startGame()">
         Start Game
       </button>
       <button
         type="button"
-        ng-show="!isHost"
+        ng-show="!currentGame.isHost"
+        ng-disabled="currentGame.isReady"
         ng-click="setReadyState(true)">
         Ready up
       </button>
