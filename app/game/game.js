@@ -16,7 +16,6 @@ angular.module("app.Game", [
   $scope.isHost = false;
 
   var gameSocket;
-
   var inGame = function () {
     return !!$scope.currentGame;
   };
@@ -52,6 +51,9 @@ angular.module("app.Game", [
 
   $scope.chatHandler = function (chatInstance) {
     $scope.chatInstance = chatInstance;
+
+    console.log("**** Chat instance: ", chatInstance);
+    $scope.chatInstance.joinRoom($scope.currentGame);
   };
 
   //

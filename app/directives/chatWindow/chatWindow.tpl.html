@@ -1,6 +1,6 @@
 <div class="chat-window-wrapper">
   <div class="chat-members"></div>
-  <div class="chat-messages">
+  <div class="chat-messages" id="chat-scroll">
     <div ng-repeat="message in messageQueue" class="chat-message">
       <strong>[{{message.author }}]:</strong> {{ message.message }}
     </div>

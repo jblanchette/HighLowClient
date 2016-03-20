@@ -18,6 +18,11 @@ angular.module("app.chatWindow", [
     });
   }
 
+  $scope.joinRoom = function (room) {
+    console.log("**** setting chat room", room);
+    $scope.currentRoom = room;
+  };
+
   $scope.handleSocketMessage = function (e, message) {
     console.log("Got chat msg: ", e, message);
 
@@ -56,7 +61,7 @@ angular.module("app.chatWindow", [
   };
 })
 
-.directive("chatWindow", function (SocketManager, chatManager, authentication) {
+.directive("chatWindow", function ($timeout, SocketManager, chatManager, authentication) {
   return {
     restrict: "E",
     scope: {
@@ -68,8 +73,17 @@ angular.module("app.chatWindow", [
     templateUrl: "app/directives/chatWindow/chatWindow.tpl.html",
     link: function (scope, element, attrs) {
       var el = angular.element(element);
+      var pageDivs = el.find("div");
+      var scrollElement = _.find(pageDivs, { id: "chat-scroll" });
+
       scope.addMessage = function (message) {
         scope.messageQueue = scope.instance.addMessage(message);
+
+        if (scrollElement) {
+          $timeout(function () {
+            scrollElement.scrollTop = scrollElement.scrollHeight;
+          });
+        }
       };
 
       scope.sendMessage = function () {
