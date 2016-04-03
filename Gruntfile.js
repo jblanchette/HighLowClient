@@ -134,12 +134,8 @@ module.exports = function (grunt) {
 
     sass: {
       build: {
-        options: {
-          includePaths: "<%= vendor_files.sass_include_dirs %>"
-        },
         files: {
-          "<%= build_dir %>/assets/application.css": "<%= app_files.sass %>",
-          "<%= build_dir %>/assets/menu-app.css": "<%= menu_files.sass %>"
+          "<%= build_dir %>/assets/application.css": "<%= app_files.sass %>"
         }
       }
     },
@@ -150,7 +146,6 @@ module.exports = function (grunt) {
           banner: "<%= meta.banner %>"
         },
         src: [
-          "<%= vendor_files.css %>",
           "<%= build_dir %>/assets/application.css"
         ],
         dest: "<%= build_dir %>/assets/application.css"
@@ -235,24 +230,6 @@ module.exports = function (grunt) {
         },
         src: ["<%= app_files.ctpl %>"],
         dest: "<%= build_dir %>/templates-common.js"
-      },
-
-      menu_app: {
-        options: {
-          base: "src/app",
-          module: "templates-menu-app"
-        },
-        src: ["<%= menu_files.templates_app %>"],
-        dest: "<%= build_dir %>/templates-menu-app.js"
-      },
-
-      menu_common: {
-        options: {
-          base: "src/common",
-          module: "templates-menu-common"
-        },
-        src: ["<%= menu_files.templates_common %>"],
-        dest: "<%= build_dir %>/templates-menu-common.js"
       }
     },
 
@@ -312,28 +289,6 @@ module.exports = function (grunt) {
           "<%= compile_dir %>/assets/app.js",
           "<%= cssmin.compile.dest %>"
         ]
-      },
-
-      build_login: {
-        dir: "<%= build_dir %>",
-        file: "login-token.html",
-        src: []
-      },
-      compile_login: {
-        dir: "<%= compile_dir %>",
-        file: "login-token.html",
-        src: []
-      },
-
-      build_settings: {
-        dir: "<%= build_dir %>/src",
-        file: "app/settings.js",
-        src: []
-      },
-      compile_settings: {
-        dir: "<%= compile_dir %>/src",
-        file: "app/settings.js",
-        src: []
       }
     },
 
@@ -356,7 +311,7 @@ module.exports = function (grunt) {
 
       html: {
         files: ["<%= app_files.html %>"],
-        tasks: ["templates:build_index", "templates:build_login"]
+        tasks: ["templates:build_index"]
       },
 
       sass: {
@@ -368,7 +323,7 @@ module.exports = function (grunt) {
 
       jssrc: {
         files: ["<%= app_files.js %>"],
-        tasks: ["karma:watch:run", "copy:build_appjs", "templates:build_settings", "templates:build_index"]
+        tasks: ["karma:watch:run", "copy:build_appjs", "templates:build_index"]
       },
 
       assets: {
@@ -388,7 +343,7 @@ module.exports = function (grunt) {
 
   delete taskConfig.delta.jsunit;
   delete taskConfig.delta.jse2e;
-  taskConfig.delta.jssrc.tasks = ["copy:build_appjs", "templates:build_settings", "concat:build_menu_js", "templates:build_index"];
+  taskConfig.delta.jssrc.tasks = ["copy:build_appjs", "concat:build_menu_js", "templates:build_index"];
 
   grunt.registerTask("watch", [
     "build",
@@ -412,33 +367,16 @@ module.exports = function (grunt) {
     "concat:build_menu_css",
     "copy:build_app_assets",
     "copy:build_vendor_assets",
-    "compile-json",
     "copy:build_appjs",
     "copy:build_vendorjs",
-    "templates:build_settings",
     "copy:build_static",
-    "templates:build_index",
-    "templates:build_login"
+    "templates:build_index"
   ]);
 
   grunt.registerTask("reckless-version-metadata", "Backfill placeholder Git revision into environment variable for reckless builds", function () {
     if (!process.env.WHOOP_WEB_GIT_REVISION) {
       process.env.WHOOP_WEB_GIT_REVISION = "reckless_build";
     }
-  });
-
-  grunt.registerTask("compile-json", function () {
-    var jsonFiles = grunt.config.get("vendor_files.json");
-    var data = {};
-
-    jsonFiles.forEach(function (file) {
-      var fileKey = _.camelCase(_.last(file.split("/"))).replace(".json", "");
-      data[fileKey] = grunt.file.readJSON(file);
-    });
-    var jsonData = "angular.module('whoop.cldrData', []).constant('cldrData', " + JSON.stringify(data) + ");";
-
-    var buildDir = grunt.config.get("build_dir") + "/assets/";
-    grunt.file.write(buildDir + "cldr-data.js", jsonData);
   });
 
   grunt.registerTask("reckless-compile", [

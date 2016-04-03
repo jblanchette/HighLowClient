@@ -1,0 +1,36 @@
+<html ng-app="app">
+	<head>
+		
+  		<link rel="stylesheet" type="text/css" href="/assets/application.css" />
+
+		
+  		<script type="text/javascript" src="/node_modules/socket.io/index.js"></script>
+  		<script type="text/javascript" src="/node_modules/lodash/index.js"></script>
+  		<script type="text/javascript" src="/node_modules/angular/angular.js"></script>
+  		<script type="text/javascript" src="/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+  		<script type="text/javascript" src="/templates-common.js"></script>
+  		<script type="text/javascript" src="/templates-app.js"></script>
+  		<script type="text/javascript" src="/src/app/app.js"></script>
+  		<script type="text/javascript" src="/src/app/directives/chatWindow/chatWindow.js"></script>
+  		<script type="text/javascript" src="/src/app/directives/gameList/gameList.js"></script>
+  		<script type="text/javascript" src="/src/app/game/game.js"></script>
+  		<script type="text/javascript" src="/src/app/home/home.js"></script>
+  		<script type="text/javascript" src="/src/app/login/login.js"></script>
+  		<script type="text/javascript" src="/src/app/services/authentication.js"></script>
+  		<script type="text/javascript" src="/src/app/services/chatManager.js"></script>
+  		<script type="text/javascript" src="/src/app/services/gameManager.js"></script>
+  		<script type="text/javascript" src="/src/app/socketManager/socketManager.js"></script>
+  		<script type="text/javascript" src="/src/app/states.js"></script>
+
+  	<script type="text/javascript">
+			var serverInstance = io("http://localhost:8080");
+		</script>
+		<title>High Low Jack</title>
+	</head>
+
+	<body>
+		<div class="outer-wrapper">
+			<ui-view class="game-window-wrapper"></ui-view>
+		</div>
+	</body>
+</html>
