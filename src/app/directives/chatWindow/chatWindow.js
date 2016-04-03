@@ -76,14 +76,17 @@ angular.module("app.chatWindow", [
       var pageDivs = el.find("div");
       var scrollElement = _.find(pageDivs, { id: "chat-scroll" });
 
-      scope.addMessage = function (message) {
-        scope.messageQueue = scope.instance.addMessage(message);
-
+      scope.scrollToBottom = function () {
         if (scrollElement) {
           $timeout(function () {
             scrollElement.scrollTop = scrollElement.scrollHeight;
           });
         }
+      };
+
+      scope.addMessage = function (message) {
+        scope.messageQueue = scope.instance.addMessage(message);
+        scope.scrollToBottom();
       };
 
       scope.sendMessage = function () {
