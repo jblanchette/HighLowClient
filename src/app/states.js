@@ -19,13 +19,13 @@ angular.module("app.States", ["ui.router"])
 
       $stateProvider.state("login", {
         url: "/login",
-        templateUrl: "app/login/login.tpl.html",
+        templateUrl: "login/login.tpl.html",
         controller: "LoginCtrl"
       });
 
       $stateProvider.state("auth", {
         abstract: true,
-        templateUrl: "app/auth.tpl.html",
+        templateUrl: "auth.tpl.html",
         controller: function ($scope, $rootScope) {
           console.log("uhh?");
         },
@@ -41,13 +41,13 @@ angular.module("app.States", ["ui.router"])
 
       $stateProvider.state("auth.home", {
         url: "/home",
-        templateUrl: "app/home/home.tpl.html",
+        templateUrl: "home/home.tpl.html",
         controller: "HomeCtrl"
       });
 
       $stateProvider.state("auth.game", {
         url: "/game",
-        templateUrl: "app/game/game.tpl.html",
+        templateUrl: "game/game.tpl.html",
         controller: "GameCtrl"
       });
     }

@@ -321,6 +321,11 @@ module.exports = function (grunt) {
         tasks: ["sass:build"]
       },
 
+      tpls: {
+        files: ["<%= app_files.atpl %>", "<%= app_files.ctpl %>"],
+        tasks: ["html2js", "karma:watch:run"]
+      },
+
       jssrc: {
         files: ["<%= app_files.js %>"],
         tasks: ["karma:watch:run", "copy:build_appjs", "templates:build_index"]
@@ -347,12 +352,14 @@ module.exports = function (grunt) {
 
   grunt.registerTask("watch", [
     "build",
+    "configureProxies:watch",
     "connect:watch",
     "delta"
   ]);
 
   grunt.registerTask("skip", [
     "build",
+    "configureProxies:watch",
     "connect:watch",
     "delta"
   ]);
@@ -391,7 +398,8 @@ module.exports = function (grunt) {
     "uglify",
     "templates:compile_index",
     "templates:compile_login",
-    "revmd5"
+    "revmd5",
+    "configureProxies:watch"
   ]);
 
   grunt.registerTask("compile", [
@@ -411,6 +419,7 @@ module.exports = function (grunt) {
     "templates:compile_index",
     "templates:compile_login",
     "revmd5",
+    "configureProxies:watch",
     "connect:compile",
     "exec:run_tests"
   ]);
@@ -429,6 +438,7 @@ module.exports = function (grunt) {
     "templates:compile_index",
     "templates:compile_login",
     "revmd5",
+    "configureProxies:watch",
     "connect:compile",
     "keepalive"
   ]);

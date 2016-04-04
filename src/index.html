@@ -3,12 +3,6 @@
 		<% styles.forEach(function (file) { %>
   		<link rel="stylesheet" type="text/css" href="/<%= file %>" /><% }); %>
 
-		<% scripts.forEach(function (file) { %>
-  		<script type="text/javascript" src="/<%= file %>"></script><% }); %>
-
-  	<script type="text/javascript">
-			var serverInstance = io("http://localhost:8080");
-		</script>
 		<title>High Low Jack</title>
 	</head>
 
@@ -16,5 +10,11 @@
 		<div class="outer-wrapper">
 			<ui-view class="game-window-wrapper"></ui-view>
 		</div>
+		<% scripts.forEach(function (file) { %>
+  		<script type="text/javascript" src="/<%= file %>"></script><% }); %>
+
+  	<script type="text/javascript">
+			var serverInstance = io("http://localhost:8080");
+		</script>
 	</body>
 </html>

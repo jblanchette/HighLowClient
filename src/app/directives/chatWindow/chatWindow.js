@@ -70,7 +70,7 @@ angular.module("app.chatWindow", [
     },
     controller: "chatWindowCtrl",
     // two bars in each graph
-    templateUrl: "app/directives/chatWindow/chatWindow.tpl.html",
+    templateUrl: "directives/chatWindow/chatWindow.tpl.html",
     link: function (scope, element, attrs) {
       var el = angular.element(element);
       var pageDivs = el.find("div");

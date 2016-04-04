@@ -1,5 +1,7 @@
 angular.module("app", [
 	"ui.router",
+    "templates-app",
+    "templates-common",
     // services
     "app.Authentication",
     "app.ChatManager",

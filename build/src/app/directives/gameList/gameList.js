@@ -117,6 +117,6 @@ angular.module("app.gameList", [
     	messageHandler: "="
     },
     // two bars in each graph
-    templateUrl: "app/directives/gameList/gameList.tpl.html"
+    templateUrl: "directives/gameList/gameList.tpl.html"
    };
 })
