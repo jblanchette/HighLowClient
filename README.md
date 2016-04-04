@@ -10,8 +10,6 @@ Run `npm install` inside the cloned repository
 
 - Run the [node.js high low server](https://github.com/jblanchette/HighLowServer)
 
-- Run `http-client -p 8081
+- Run `grunt watch`
 
-  **__Make sure you don't use port `8080` because the server currently expects to use it.__**
-
-- Navigate to the url `http-server` says it is hosting
+- Navigate to the provided URL
