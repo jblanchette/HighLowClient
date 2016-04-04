@@ -47,12 +47,27 @@ angular.module("app.Game", [
     var msgKey = state ? "USER_READY" : "USER_BUSY";
 
     SocketManager.sendTo("gameList", msgKey, msg);
+    $scope.addChatMessage({
+      author: "me",
+      message: "You are now marked as " + (state ? "ready" : "busy")
+    });
   };
 
   $scope.chatHandler = function (chatInstance) {
     $scope.chatInstance = chatInstance;
     $scope.chatInstance.joinRoom($scope.currentGame);
+
+    $scope.addChatMessage({
+      author: "Server",
+      message: "You Joined A Game"
+    });
   };
+
+  $scope.addChatMessage = function (msg) {
+    $timeout(function () {
+      $scope.chatInstance.addMessage(msg);
+    })
+  }
 
   //
   // WebSocket handler
@@ -64,40 +79,38 @@ angular.module("app.Game", [
       case "GAME_STARTED":
         console.log("Got a game started signal");
         console.log("Game msg: ", message.data);
-
         setGameInfo(message.data.game);
+
+        $scope.addChatMessage({
+          author: "Server",
+          message: "Game is starting, connecting to server..."
+        });
         connectToGame();
       break;
       case "USER_JOINED":
         setGameInfo(message.data.game);
-
-        $scope.chatInstance.addMessage({
-          author: "Server",
-          message: "User joined: " + message.data.focus.nickname
-        });
       break;
       case "USER_LEFT":
         setGameInfo(message.data.game);
 
-        $scope.chatInstance.addMessage({
+        $scope.addChatMessage({
           author: "Server",
           message: "User left: " + message.data.focus.nickname
         });
       break;
       case "USER_READY":
-        $scope.chatInstance.addMessage({
+        $scope.addChatMessage({
           author: "Server",
           message: "User ready: " + message.data.focus.nickname
         });
       break;
       case "USER_BUSY":
-        $scope.chatInstance.addMessage({
+        $scope.addChatMessage({
           author: "Server",
           message: "User busy: " + message.data.focus.nickname
         });
       break;
       case "GAME_INFO":
-        console.log("*** SETTING GAME_INFO", message);
         setGameInfo(message.data.game);
       break;
     }
@@ -107,7 +120,6 @@ angular.module("app.Game", [
     console.log("Handling game msg: ", e, message);
     switch(message.key) {
       case "USER_JOINED":
-        console.log("User joined game, updating info");
         setGameInfo(message.data.game);
       break;
       case "USER_LEFT":
@@ -129,8 +141,17 @@ angular.module("app.Game", [
     }
   };
 
+  $scope.handleGameConnect = function (e, data) {
+    $scope.addChatMessage({
+      author: "Server",
+      message: "Connected to game."
+    });
+
+    // TODO: ask for our games info?  idk
+  };
+
   var setupConnection = function () {
-    if (gameSocket || SocketManager.get("game")) {
+    if (gameSocket) {
       return;
     }
 
@@ -144,9 +165,11 @@ angular.module("app.Game", [
 
   var connectToGame = function () {
     if (!gameSocket) {
+      console.log("%%%% ERROR FINDING GAME SOCKET %%%%%");
       return;
     }
 
+    console.log("***%% CONNECTING TO GAME SERVER %%***");
     gameSocket.connect();
   };
 
@@ -156,9 +179,13 @@ angular.module("app.Game", [
     });
   });
 
-  var listListener = $scope.$on("socket:gameList:message", function (e, data) {
-    console.log("Recieved a game list message: ", e, data);
+  var gameConnectListener = $scope.$on("socket:game:connect", function (e, data) {
+    $timeout(function () {
+      $scope.handleGameConnect(e, data);
+    });
+  });
 
+  var listListener = $scope.$on("socket:gameList:message", function (e, data) {
     $timeout(function () {
       $scope.handleGameListMessage(e, data);
     });
@@ -184,7 +211,6 @@ angular.module("app.Game", [
         isReady: _.some(curGame.members, { id: authUser.id, ready: true })
       };
       
-      console.log("Local: ", localOptions);
       curGame = _.merge(curGame, localOptions);
     }
 
