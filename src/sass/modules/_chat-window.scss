@@ -1,0 +1,36 @@
+chat-window.global-chat {
+  display: block;
+  float: left;
+  border: 1px solid #333;
+  width: 45rem;
+  height: 25rem;
+}
+
+chat-window .chat-messages {
+  padding: 0 1rem;
+  height: 22rem;
+  overflow-y: auto;
+}
+
+chat-window .chat-input-wrapper {
+  padding: 0.5rem 1rem;
+  height: 2.5rem;
+}
+
+chat-window .chat-input-wrapper input[type="text"],
+chat-window .chat-input-wrapper button {
+  height: 2rem;
+  padding: 0;
+  margin: 0;
+}
+
+chat-window .chat-input-wrapper input[type="text"] {
+  font-size: 1rem;
+  width: 75%;
+}
+
+chat-window button.button-send {
+  position: relative;
+  top: -1px;
+  width: 24%;
+}
