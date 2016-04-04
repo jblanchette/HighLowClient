@@ -14,6 +14,7 @@ angular.module("app.Game", [
 
   $scope.currentGame = gameManager.getCurrentGame();
   $scope.isHost = false;
+  $scope.chatOpen = true;
 
   var gameSocket;
   var inGame = function () {
@@ -23,6 +24,10 @@ angular.module("app.Game", [
   //
   // UI Scope methods
   //
+
+  $scope.toggleChat = function () {
+    $scope.chatOpen = !$scope.chatOpen;
+  };
 
   $scope.startGame = function () {
     if (!inGame() || $scope.currentGame.hostId !== $scope.authUser.id) {

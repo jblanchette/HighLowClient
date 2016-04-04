@@ -108,7 +108,7 @@ chat-window button.button-send {
 .game {
   position: relative;
   margin: 0 auto;
-  width: 70rem;
+  width: 100rem;
   height: 46rem;
   border: 1px solid #333; }
 
@@ -129,28 +129,62 @@ chat-window button.button-send {
 
 .game .banner {
   border: 1px solid #CCC;
-  padding: 0.5rem;
-  height: 5rem;
-  overflow: auto; }
+  height: 3rem; }
 
 .banner h3 {
-  margin: 0; }
+  margin: 0.5rem; }
 
 .game-area {
-  height: 20rem;
+  position: relative;
+  height: 38rem;
   border: 1px solid #ccc; }
   .game-area .game-content {
     padding: 1rem; }
+  .game-area .members {
+    overflow-y: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 16rem;
+    height: 10rem; }
+  .game-area .table {
+    border: 1px solid #333;
+    position: absolute;
+    height: 26rem;
+    width: 80rem;
+    top: 0;
+    left: 10rem; }
+  .game-area .player-area {
+    border: 1px solid #333;
+    position: absolute;
+    height: 10rem;
+    width: 40rem;
+    bottom: 0;
+    left: 30rem; }
+
+.chat-toggle-wrapper {
+  background: #FFF;
+  position: absolute;
+  width: 25rem;
+  right: 0;
+  bottom: 0;
+  z-index: 10; }
+  .chat-toggle-wrapper .chat-toggle-area {
+    border: 1px solid #333;
+    height: 2rem;
+    width: 100%;
+    cursor: pointer; }
 
 chat-window.game-chat {
-  position: absolute;
-  width: 45rem;
-  left: 12.5rem;
-  bottom: 0; }
+  width: 25rem; }
   chat-window.game-chat .chat-window-wrapper {
     border: 1px solid #ccc; }
+  chat-window.game-chat .chat-messages,
+  chat-window.game-chat .chat-input-wrapper {
+    padding: 0; }
   chat-window.game-chat .chat-messages {
-    height: 12rem; }
+    height: 12rem;
+    padding: 0.25rem; }
 
 .outer-wrapper {
   padding: 2rem; }

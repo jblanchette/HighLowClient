@@ -54,27 +54,26 @@ angular.module("game/game.tpl.html", []).run(["$templateCache", function($templa
     "  <div class=\"game-content\">\n" +
     "    <div class=\"banner\">\n" +
     "      <h3>Game Name: {{ currentGame.gameName }}</h3>\n" +
-    "    \n" +
-    "      Members: <br>\n" +
-    "      <ul>\n" +
-    "        <li ng-repeat=\"member in currentGame.members\">\n" +
-    "          {{ member.id }}: {{ member.nickname }}\n" +
-    "        </li>\n" +
-    "      </ul>\n" +
-    "\n" +
-    "      <div class=\"game-debug\">\n" +
-    "        Current game: {{ currentGame.hostId }} <br>\n" +
-    "        Me: {{ authUser }} <br>\n" +
-    "        Am I Ready?: {{ currentGame.isReady }} <br>\n" +
-    "\n" +
-    "        Game state: <br>\n" +
-    "        {{ currentGame }}\n" +
-    "      </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"game-area\">\n" +
     "      <div class=\"game-content\">\n" +
-    "        #Game-Area\n" +
+    "        <div class=\"members\">    \n" +
+    "          <span>Members:</span>\n" +
+    "          <ul>\n" +
+    "            <li ng-repeat=\"member in currentGame.members\">\n" +
+    "              {{ member.id }}: {{ member.nickname }}\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"table\">\n" +
+    "          #Table: cards that are in play, scoreboard\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"player-area\">\n" +
+    "          #Player-Area:  cards, bidding controls\n" +
+    "        </div>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "\n" +
@@ -100,11 +99,18 @@ angular.module("game/game.tpl.html", []).run(["$templateCache", function($templa
     "      </button>\n" +
     "    </div>\n" +
     "    \n" +
-    "    <chat-window \n" +
-    "      nsp=\"gameList\" \n" +
-    "      class=\"game-chat\" \n" +
-    "      handler=\"chatHandler\">\n" +
-    "    </chat-window>\n" +
+    "    <div class=\"chat-toggle-wrapper\">\n" +
+    "      <chat-window \n" +
+    "        nsp=\"gameList\" \n" +
+    "        class=\"game-chat\" \n" +
+    "        ng-show=\"chatOpen\"\n" +
+    "        handler=\"chatHandler\">\n" +
+    "      </chat-window>\n" +
+    "\n" +
+    "      <div class=\"chat-toggle-area\" ng-click=\"toggleChat()\">\n" +
+    "        Chat Toggle\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </div>\n" +
     "</div>\n" +
     "");

@@ -2,27 +2,26 @@
   <div class="game-content">
     <div class="banner">
       <h3>Game Name: {{ currentGame.gameName }}</h3>
-    
-      Members: <br>
-      <ul>
-        <li ng-repeat="member in currentGame.members">
-          {{ member.id }}: {{ member.nickname }}
-        </li>
-      </ul>
-
-      <div class="game-debug">
-        Current game: {{ currentGame.hostId }} <br>
-        Me: {{ authUser }} <br>
-        Am I Ready?: {{ currentGame.isReady }} <br>
-
-        Game state: <br>
-        {{ currentGame }}
-      </div>
     </div>
 
     <div class="game-area">
       <div class="game-content">
-        #Game-Area
+        <div class="members">    
+          <span>Members:</span>
+          <ul>
+            <li ng-repeat="member in currentGame.members">
+              {{ member.id }}: {{ member.nickname }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="table">
+          #Table: cards that are in play, scoreboard
+        </div>
+
+        <div class="player-area">
+          #Player-Area:  cards, bidding controls
+        </div>
       </div>
     </div>
 
@@ -48,10 +47,17 @@
       </button>
     </div>
     
-    <chat-window 
-      nsp="gameList" 
-      class="game-chat" 
-      handler="chatHandler">
-    </chat-window>
+    <div class="chat-toggle-wrapper">
+      <chat-window 
+        nsp="gameList" 
+        class="game-chat" 
+        ng-show="chatOpen"
+        handler="chatHandler">
+      </chat-window>
+
+      <div class="chat-toggle-area" ng-click="toggleChat()">
+        Chat Toggle
+      </div>
+    </div>
   </div>
 </div>
