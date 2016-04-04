@@ -70,9 +70,10 @@ chat-window button.button-send {
   font-size: 1rem; }
 
 .game {
+  position: relative;
   margin: 0 auto;
   width: 70rem;
-  height: 40rem;
+  height: 46rem;
   border: 1px solid #333; }
 
 .game-content {
@@ -90,29 +91,30 @@ chat-window button.button-send {
 .game .controls button {
   margin: 1rem 0; }
 
+.game .banner {
+  border: 1px solid #CCC;
+  padding: 0.5rem;
+  height: 5rem;
+  overflow: auto; }
+
 .banner h3 {
   margin: 0; }
 
-.game-area div {
-  padding: 1rem; }
-
-.chat-wrapper {
-  width: 40rem;
-  height: 12rem; }
+.game-area {
+  height: 20rem;
+  border: 1px solid #ccc; }
+  .game-area .game-content {
+    padding: 1rem; }
 
 chat-window.game-chat {
-  display: block;
-  border: 1px solid #333;
-  width: 40rem;
-  height: 12rem; }
-
-chat-window.game-chat .chat-messages {
-  padding: 0 1rem;
-  height: 10rem;
-  overflow-y: auto; }
-
-chat-window.game-chat .chat-input-wrapper {
-  padding: 0; }
+  position: absolute;
+  width: 45rem;
+  left: 12.5rem;
+  bottom: 0; }
+  chat-window.game-chat .chat-window-wrapper {
+    border: 1px solid #ccc; }
+  chat-window.game-chat .chat-messages {
+    height: 12rem; }
 
 .outer-wrapper {
   padding: 2rem; }

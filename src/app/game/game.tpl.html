@@ -9,19 +9,24 @@
           {{ member.id }}: {{ member.nickname }}
         </li>
       </ul>
+
+      <div class="game-debug">
+        Current game: {{ currentGame.hostId }} <br>
+        Me: {{ authUser }} <br>
+        Am I Ready?: {{ currentGame.isReady }} <br>
+
+        Game state: <br>
+        {{ currentGame }}
+      </div>
     </div>
 
     <div class="game-area">
-      Current game: {{ currentGame.hostId }} <br>
-      Me: {{ authUser }} <br>
-      Am I Ready?: {{ currentGame.isReady }} <br>
-
-      Game state: <br>
-      {{ currentGame }}
+      <div class="game-content">
+        #Game-Area
+      </div>
     </div>
 
     <div class="controls">
-
       <button
         type="button"
         ng-show="currentGame.isHost"
@@ -43,12 +48,10 @@
       </button>
     </div>
     
-    <div class="chat-wrapper">
-      <chat-window 
-        nsp="gameList" 
-        class="game-chat" 
-        handler="chatHandler">
-      </chat-window>
-    </div>
+    <chat-window 
+      nsp="gameList" 
+      class="game-chat" 
+      handler="chatHandler">
+    </chat-window>
   </div>
 </div>

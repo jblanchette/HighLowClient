@@ -61,19 +61,24 @@ angular.module("game/game.tpl.html", []).run(["$templateCache", function($templa
     "          {{ member.id }}: {{ member.nickname }}\n" +
     "        </li>\n" +
     "      </ul>\n" +
+    "\n" +
+    "      <div class=\"game-debug\">\n" +
+    "        Current game: {{ currentGame.hostId }} <br>\n" +
+    "        Me: {{ authUser }} <br>\n" +
+    "        Am I Ready?: {{ currentGame.isReady }} <br>\n" +
+    "\n" +
+    "        Game state: <br>\n" +
+    "        {{ currentGame }}\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"game-area\">\n" +
-    "      Current game: {{ currentGame.hostId }} <br>\n" +
-    "      Me: {{ authUser }} <br>\n" +
-    "      Am I Ready?: {{ currentGame.isReady }} <br>\n" +
-    "\n" +
-    "      Game state: <br>\n" +
-    "      {{ currentGame }}\n" +
+    "      <div class=\"game-content\">\n" +
+    "        #Game-Area\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"controls\">\n" +
-    "\n" +
     "      <button\n" +
     "        type=\"button\"\n" +
     "        ng-show=\"currentGame.isHost\"\n" +
@@ -95,13 +100,11 @@ angular.module("game/game.tpl.html", []).run(["$templateCache", function($templa
     "      </button>\n" +
     "    </div>\n" +
     "    \n" +
-    "    <div class=\"chat-wrapper\">\n" +
-    "      <chat-window \n" +
-    "        nsp=\"gameList\" \n" +
-    "        class=\"game-chat\" \n" +
-    "        handler=\"chatHandler\">\n" +
-    "      </chat-window>\n" +
-    "    </div>\n" +
+    "    <chat-window \n" +
+    "      nsp=\"gameList\" \n" +
+    "      class=\"game-chat\" \n" +
+    "      handler=\"chatHandler\">\n" +
+    "    </chat-window>\n" +
     "  </div>\n" +
     "</div>\n" +
     "");
